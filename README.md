@@ -22,5 +22,3 @@ A responsive weather dashboard web application that provides real-time weather u
 - **Backend:** Node.js, Express.js
 - **API:** [OpenWeatherMap API](https://openweathermap.org/)
 - **Hosting:** Render
-
----
