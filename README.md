@@ -27,3 +27,4 @@ A responsive weather dashboard web application that provides real-time weather u
 
 ## 📁 Project Structure
 
+weather-dashboard/ ├── public/ │ ├── images/ │ │ └── [weather condition images like Clear.png, Rain.png, etc.] │ ├── index.html │ ├── style.css │ └── script.js ├── server.js ├── .env ├── .gitignore ├── package.json └── README.md
