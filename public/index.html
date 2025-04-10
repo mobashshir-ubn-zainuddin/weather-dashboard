@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="weather-container">
+        <div class="search-box">
+            <input type="text" placeholder="Enter city name" id="cityInput">
+            <button onclick="handleSearch()">Search</button>
+        </div>
+        <div class="weather-info">
+            <h2 class="location">Loading...</h2>
+            <img class="weather-icon" src="" alt="Weather icon">
+            <div class="temperature"></div>
+            <div class="description"></div>
+            <div class="details">
+                <div class="detail-item">
+                    <h3>Feels Like</h3>
+                    <p class="feels-like"></p>
+                </div>
+                <div class="detail-item">
+                    <h3>Humidity</h3>
+                    <p class="humidity"></p>
+                </div>
+                <div class="detail-item">
+                    <h3>Wind Speed</h3>
+                    <p class="wind-speed"></p>
+                </div>
+                <div class="detail-item">
+                    <h3>Precipitation</h3>
+                    <p class="precipitation"></p>
+                </div>
+                <div class="detail-item">
+                    <h3>Air Quality</h3>
+                    <p class="air-quality"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Function to handle search
+        function handleSearch() {
+            const cityInput = document.getElementById('cityInput');
+            const city = cityInput.value.trim();
+            
+            if (city === '') {
+                alert('Please enter a city name');
+                return;
+            }
+            
+            getWeather(city);
+        }
+
+        // Add event listener for Enter key
+        document.getElementById('cityInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                handleSearch();
+            }
+        });
+
+        // Function to get weather data
+        async function getWeather(city) {
+            try {
+                const response = await fetch(`/api/weather/${encodeURIComponent(city)}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                updateWeatherUI(data);
+            } catch (error) {
+                console.error('Error fetching weather data:', error);
+                alert('Error fetching weather data. Please try again.');
+                document.querySelector('.location').textContent = 'Error';
+            }
+        }
+
+        // Function to update the UI with weather data
+        function updateWeatherUI(data) {
+            // Update location
+            document.querySelector('.location').textContent = `${data.name}, ${data.sys.country}`;
+            
+            // Update temperature
+            document.querySelector('.temperature').textContent = `${Math.round(data.main.temp)}°C`;
+            
+            // Update weather description
+            document.querySelector('.description').textContent = data.weather[0].description;
+            
+            // Update feels like temperature
+            document.querySelector('.feels-like').textContent = `${Math.round(data.main.feels_like)}°C`;
+            
+            // Update humidity
+            document.querySelector('.humidity').textContent = `${data.main.humidity}%`;
+            
+            // Update wind speed
+            document.querySelector('.wind-speed').textContent = `${data.wind.speed} m/s`;
+            
+            // Update precipitation (rain or snow)
+            const precipitation = data.rain?.['1h'] || data.snow?.['1h'] || 0;
+            document.querySelector('.precipitation').textContent = `${precipitation} mm`;
+            
+            // Update air quality (using pressure as a proxy)
+            const pressure = data.main.pressure;
+            const airQualityElement = document.querySelector('.air-quality');
+            let qualityClass = '';
+            let qualityText = '';
+            
+            if (pressure < 990) {
+                qualityClass = 'poor';
+                qualityText = 'Poor';
+            } else if (pressure < 1000) {
+                qualityClass = 'moderate';
+                qualityText = 'Moderate';
+            } else if (pressure < 1010) {
+                qualityClass = 'good';
+                qualityText = 'Good';
+            } else {
+                qualityClass = 'excellent';
+                qualityText = 'Excellent';
+            }
+            
+            airQualityElement.className = 'air-quality ' + qualityClass;
+            airQualityElement.textContent = qualityText;
+            
+            // Update background
+            document.body.style.backgroundImage = `url('${data.backgroundUrl}')`;
+        }
+
+        // Load default city on page load
+        window.onload = function() {
+            getWeather('London');
+        };
+    </script>
+</body>
+</html> 
