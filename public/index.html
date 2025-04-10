@@ -85,6 +85,13 @@
             // Update location
             document.querySelector('.location').textContent = `${data.name}, ${data.sys.country}`;
             
+            // Update weather icon
+            const iconCode = data.weather[0].icon;
+            const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+            const weatherIcon = document.querySelector('.weather-icon');
+            weatherIcon.src = iconUrl;
+            weatherIcon.alt = data.weather[0].description;
+            
             // Update temperature
             document.querySelector('.temperature').textContent = `${Math.round(data.main.temp)}°C`;
             
