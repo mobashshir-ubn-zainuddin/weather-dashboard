@@ -33,6 +33,7 @@ const weatherBackgrounds = {
     'Tornado': '/images/Tornado.png',
     'Scattered Clouds': '/images/Scattered Clouds.png',
     'Broken Clouds': '/images/Broken Clouds.png',
+    'Few Clouds': '/images/Few Clouds.png',
     'Overcast Clouds': '/images/Overcast Clouds.png'
 };
 
