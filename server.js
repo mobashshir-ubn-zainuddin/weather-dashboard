@@ -48,7 +48,10 @@ app.get('/api/weather/:city', async (req, res) => {
         
         // Check for specific cloud types in the description
         if (weatherDescription.toLowerCase().includes('scattered clouds')) {
-            backgroundUrl = weatherBackgrounds['Scattered Clouds'];
+            backgroundUrl = weatherBackgrounds['Scattered Clouds'];}
+        else if (weatherDescription.toLowerCase().includes('few clouds')) {
+            backgroundUrl = weatherBackgrounds['Few Clouds'];
+            }
         } else if (weatherDescription.toLowerCase().includes('broken clouds')) {
             backgroundUrl = weatherBackgrounds['Broken Clouds'];
         } else if (weatherDescription.toLowerCase().includes('overcast clouds')) {
