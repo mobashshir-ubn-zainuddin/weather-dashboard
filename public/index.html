@@ -82,6 +82,21 @@
 
         // Function to update the UI with weather data
         function updateWeatherUI(data) {
+            if (!data || data.error) {
+                // Set default state when there's an error or no data
+                document.querySelector('.location').textContent = 'Type the city name';
+                document.querySelector('.temperature').textContent = '--';
+                document.querySelector('.description').textContent = '--';
+                document.querySelector('.feels-like').textContent = '--';
+                document.querySelector('.humidity').textContent = '--';
+                document.querySelector('.wind-speed').textContent = '--';
+                document.querySelector('.precipitation').textContent = '--';
+                document.querySelector('.air-quality').textContent = '--';
+                document.querySelector('.weather-icon').src = '';
+                document.body.style.backgroundImage = "url('/images/Clear.png')";
+                return;
+            }
+
             // Update location
             document.querySelector('.location').textContent = `${data.name}, ${data.sys.country}`;
             
@@ -138,9 +153,41 @@
             document.body.style.backgroundImage = `url('${data.backgroundUrl}')`;
         }
 
-        // Load default city on page load
+        // Function to get user's location
+        function getUserLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        try {
+                            const response = await fetch(`/api/weather/coordinates/${position.coords.latitude}/${position.coords.longitude}`);
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! status: ${response.status}`);
+                            }
+                            const data = await response.json();
+                            updateWeatherUI(data);
+                        } catch (error) {
+                            console.error('Error fetching weather data:', error);
+                            setDefaultState();
+                        }
+                    },
+                    (error) => {
+                        console.error('Error getting location:', error);
+                        setDefaultState();
+                    }
+                );
+            } else {
+                setDefaultState();
+            }
+        }
+
+        // Function to set default state
+        function setDefaultState() {
+            updateWeatherUI(null);
+        }
+
+        // Load default state on page load
         window.onload = function() {
-            getWeather('London');
+            setDefaultState();
         };
     </script>
 </body>
