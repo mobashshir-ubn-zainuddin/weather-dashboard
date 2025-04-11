@@ -9,7 +9,7 @@ A responsive weather dashboard web application that provides real-time weather u
 ## 🚀 Features
 
 - 🌍 Get real-time weather info for any city worldwide
-- 🌡️ Displays temperature, humidity, wind speed, weather condition
+- 🌡️ Displays temperature, humidity, wind speed, weather condition, precipitation & air quality
 - 🎨 Dynamic background changes based on weather (clear, rain, clouds, etc.)
 - 🔍 Simple and intuitive user interface
 - 📱 Fully responsive design for mobile and desktop
