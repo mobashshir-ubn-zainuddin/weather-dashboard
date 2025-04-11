@@ -185,9 +185,10 @@
             updateWeatherUI(null);
         }
 
-        // Load default state on page load
+        // Load default state and request location on page load
         window.onload = function() {
             setDefaultState();
+            getUserLocation();
         };
     </script>
 </body>
